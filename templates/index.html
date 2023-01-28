@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
     <link rel="stylesheet" type="text/css" href="/static/styles.css">
     <style>
         body {
@@ -24,11 +27,19 @@
         <input type="text" id="word" name="word">
         <br>
 
-        <label for="stock-ticker">Stock Ticker:</label>
-        <input type="text" id="stock-ticker" name="stock-ticker">
-        <br>
 
-        <label for="start">Start date:</label>
+        <div>
+            <label for="start">Stock Ticker:</label>
+            <datalist id="stock-ticker">
+                {% for ticker in ticker_list %}
+                    <option value="{{ ticker }}">
+                {% endfor %}
+            </datalist>
+            <input autoComplete="on" list="ticker_list"/>
+        </div>
+
+
+        <label for="start">Start Date:</label>
         <input type="date" id="start" name="timeframe-start"
                value=""
                min="2004-01-01" max="">
@@ -53,6 +64,11 @@
         <br><br>
         <input type="submit" value="Submit">
     </form>
+
+    <div style="text-align: center;" class="center" ; id="plot">
+        {{ plot_div|safe }}
+    </div>
+
 </div>
 </body>
 </html>

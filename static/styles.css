@@ -6,6 +6,6 @@
 .center {
     margin: auto;
     width: 50%;
-    border: 3px solid green;
+    border: 3px dashed black;
     padding: 10px;
 }
