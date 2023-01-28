@@ -4,10 +4,11 @@
     <link rel="stylesheet" type="text/css" href="/static/styles.css">
     <meta charset="UTF-8">
     <title>Plot</title>
-    <script src="{{ script|safe }}"></script>
 </head>
 <body>
-<div>{{ div | safe }}</div>
+<div style="text-align: center;" class="center" ; id="plot">
+    {{ plot_div|safe }}
+</div>
 
 </body>
 </html>
