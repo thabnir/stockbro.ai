@@ -1,10 +1,19 @@
 import pandas as pd
+from pytrends.request import TrendReq
+import pytrends
+from sklearn.metrics import accuracy_score
 from sklearn.neural_network import MLPClassifier
-from sklearn.datasets import make_classification
 from sklearn.model_selection import train_test_split
+from sklearn.datasets import make_classification
+from sklearn.pipeline import make_pipeline
 
-trend = pd.read_csv()
-stock = pd.read_csv()
+pytrend = TrendReq()
+kw_list = ["word"]
+pytrends.build_payload(kw_list, timeframe='today 5-y')
+
+trend = pytrend.interest_over_time()
+stock = pd.read_csv("S&P.csv")
+stock.drop('High', 'Low', axis = 1)
 
 # Combine Google Trends and Stock Prices in one CSV file ("stock")
 trends = []
@@ -24,7 +33,6 @@ def preprocess(data):
 
     return x, y
 
-
 all_X, all_y = preprocess(data)
 
 X_train, X_test, y_train, y_test = train_test_split(all_X, all_y)
@@ -38,4 +46,6 @@ clf.fit(X_train, y_train)
 print(clf.score(X_test, y_test))
 
 # Predictions on new data
-clf.predict(X_test[15:25])  # some range
+y_pred = clf.predict(X_test)
+accuracy = accuracy_score(y_test, y_pred)
+print(accuracy)
