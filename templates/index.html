@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="/static/styles.css">
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        body {
+            background-color: whitesmoke;
+        }
+    </style>
+    <title>Word Popularity Graph</title>
+</head>
+
+
+<body>
+<div style="text-align: center;">
+    <h1>Word Popularity Graph</h1>
+    <form action="{{ url_for('graph') }}" method="post">
+
+        <label for="word">Word:</label>
+        <input type="text" id="word" name="word">
+        <br>
+        <label for="start">Start date:</label>
+
+
+        <input type="date" id="start" name="timeframe-start"
+               value=""
+               min="2004-01-01" max="">
+
+        <label for="end">End date:</label>
+        <input type="date" id="end" name="timeframe-end"
+               value=""
+               min="2004-01-01" max="">
+        <br>
+        <script>
+            let today = new Date();
+            let dd = String(today.getDate()).padStart(2, '0');
+            let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+            let yyyy = today.getFullYear();
+
+            today = yyyy + '-' + mm + '-' + dd;
+            document.getElementById("start").setAttribute("max", today);
+            document.getElementById("end").setAttribute("max", today);
+        </script>
+
+
+        <br><br>
+        <input type="submit" value="Submit">
+    </form>
+</div>
+</body>
+</html>
