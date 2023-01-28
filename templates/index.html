@@ -1,9 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
+    <script>
+        $(document).ready(function () {
+            $("#stock-ticker-select").select2();
+        });
+    </script>
     <link rel="stylesheet" type="text/css" href="/static/styles.css">
     <style>
         body {
@@ -27,28 +33,25 @@
         <input type="text" id="word" name="word">
         <br>
 
-
-        <div>
-            <label for="start">Stock Ticker:</label>
-            <datalist id="stock-ticker">
-                {% for ticker in ticker_list %}
-                    <option value="{{ ticker }}">
-                {% endfor %}
-            </datalist>
-            <input autoComplete="on" list="ticker_list"/>
-        </div>
-
+        <label for="stock-ticker-select">Stock Ticker:</label>
+        <select id="stock-ticker-select" name="stock-ticker">
+            <option>Select a Ticker</option>
+            {% for ticker in ticker_list %}
+                <option value="{{ ticker }}">{{ ticker }}</option>
+            {% endfor %}
+        </select>
+        <br>
 
         <label for="start">Start Date:</label>
-        <input type="date" id="start" name="timeframe-start"
+        <input type="date" id="timeframe-start" name="timeframe-start"
                value=""
                min="2004-01-01" max="">
-
         <label for="end">End date:</label>
-        <input type="date" id="end" name="timeframe-end"
+        <input type="date" id="timeframe-end" name="timeframe-end"
                value=""
                min="2004-01-01" max="">
         <br>
+
         <script>
             let today = new Date();
             let dd = String(today.getDate()).padStart(2, '0');
@@ -56,10 +59,9 @@
             let yyyy = today.getFullYear();
 
             today = yyyy + '-' + mm + '-' + dd;
-            document.getElementById("start").setAttribute("max", today);
-            document.getElementById("end").setAttribute("max", today);
+            document.getElementById("timeframe-start").setAttribute("max", today);
+            document.getElementById("timeframe-end").setAttribute("max", today);
         </script>
-
 
         <br><br>
         <input type="submit" value="Submit">
@@ -71,6 +73,7 @@
 
 </div>
 </body>
+
 </html>
 
 <html> # trying to add stonk meme photo

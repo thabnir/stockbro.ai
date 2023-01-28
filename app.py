@@ -1,3 +1,5 @@
+import sys
+
 from bokeh.embed import file_html
 from bokeh.models import Range1d, LinearAxis
 from bokeh.plotting import figure
@@ -5,24 +7,34 @@ from bokeh.resources import CDN
 from flask import Flask, render_template, request
 from pytrends.request import TrendReq
 import yfinance as yf
-import logging
+import csv
 
 app = Flask(__name__)
 
+ticker_list = []
+with open("tickers.csv", "r") as csvfile:
+    reader = csv.reader(csvfile)
+    next(reader)  # Skip the header row
+    for row in reader:
+        ticker_list.append(row[1])  # Add the ticker to the list
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    print('Hello world!', file=sys.stderr)
+    return render_template('index.html', ticker_list=ticker_list)
 
 
 @app.route('/graph', methods=['POST'])
 def graph():
+    print('Trying to graph', file=sys.stderr)
+    for key in request.form:
+        print(f'{key}: {request.form[key]}', file=sys.stderr)
     # Get the user's input
     word = request.form['word']
-    user_stock = request.form['stock-ticker']
+    ticker = request.form['stock-ticker']
     start = request.form['timeframe-start']
     end = request.form['timeframe-end']
-    html = graph_data(word, user_stock, start, end)
+    html = graph_data(word, ticker, start, end)
     # embeds html in the template (graph.html)
     return render_template('index.html', plot_div=html)
 
