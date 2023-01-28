@@ -4,11 +4,34 @@
     <link rel="stylesheet" type="text/css" href="/static/styles.css">
     <meta charset="UTF-8">
     <title>Plot</title>
+    <link rel="stylesheet" type="text/css" href="/static/styles.css">
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        body {
+            background-color: whitesmoke;
+        }
+    </style>
 </head>
 <body>
-<div style="text-align: center;" class="center" ; id="plot">
-    {{ plot_div|safe }}
-</div>
+<div style="text-align: center;" class="center">
+    <div style="text-align: center;" class="center" id="plot">
+        {{ plot_div|safe }}
+    </div>
 
+    <div style="text-align: center;" class="center" id="correlation">
+        <h2>
+            Correlation:
+        </h2>
+        <h4>
+            {{ correlation|safe }}
+        </h4>
+    </div>
+
+    <img src="static/stonks.png" alt="stonks">
+
+</div>
 </body>
 </html>

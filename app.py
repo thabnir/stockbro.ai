@@ -42,15 +42,15 @@ def graph():
     trend_data = get_trend_data(word, start + ' ' + end)
     stock_data = get_stock_data(ticker, start, end)
 
-    html = graph_data(word, ticker, trend_data, stock_data)
+    html = plot_data(word, ticker, trend_data, stock_data)
 
     correlation = get_correlation(trend_data[word], stock_data['Close'])
     print(f'Correlation: {correlation}', file=sys.stderr)
     # embeds html in the template (graph.html)
-    return render_template('index.html', plot_div=html, correlation=correlation)
+    return render_template('graph.html', plot_div=html, correlation=correlation)
 
 
-def graph_data(word, ticker, trend_data, stock_data):
+def plot_data(word, ticker, trend_data, stock_data):
     print(f'Graphing data for {word} and {ticker}...', file=sys.stderr)
     # Create a plot (bokeh)
     bokeh_plot = figure(title=f'Popularity of the word "{word}" and {ticker} stock price over time',
@@ -102,13 +102,19 @@ def get_stock_data(ticker_name, start, end):
 
 def get_correlation(word_data, stock_close_data):
     print(f'Getting correlation between\n{word_data}\nand\n{stock_close_data}\n...', file=sys.stderr)
-    # convert stock_data from datetime64[ns, America/New_York] to datetime64[ns]
-    stock_close_data.index = stock_close_data.index.tz_localize(None)
-    net_data = pd.merge(word_data, stock_close_data, left_on='date', right_on='Date')
-    # print("Printing net data", file=sys.stderr)
-    # print(net_data, file=sys.stderr)
+    net_data = get_merged_data(word_data, stock_close_data)
     correlation = net_data[word_data.name].corr(net_data['Close'])
     return correlation
+
+
+def get_merged_data(word_data, stock_close_data):
+    # convert stock_data from datetime64[ns, America/New_York] to datetime64[ns]
+    stock_close_data.index = stock_close_data.index.tz_localize(None)
+    # Merge the data
+    merged_data = pd.merge(word_data, stock_close_data, left_index=True, right_index=True)
+    merged_data = merged_data.dropna()
+    print(f'Merged data:\n{merged_data}', file=sys.stderr)
+    return merged_data
 
 
 def get_stocks_data(ticker_names, start, end):
