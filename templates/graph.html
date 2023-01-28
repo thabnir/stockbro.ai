@@ -23,10 +23,12 @@
 
     <div style="text-align: center;" class="center" id="correlation">
         <h2>
-            Correlation:
+            Correlation from {{ samples|safe }} samples:
         </h2>
         <h4>
             {{ correlation|safe }}
+            <br>
+            {{ ai_commentary|safe }}
         </h4>
     </div>
 

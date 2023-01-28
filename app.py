@@ -44,10 +44,13 @@ def graph():
 
     html = plot_data(word, ticker, trend_data, stock_data)
 
-    correlation = get_correlation(trend_data[word], stock_data['Close'])
-    print(f'Correlation: {correlation}', file=sys.stderr)
+    correlation, sample_size = get_correlation(trend_data[word], stock_data['Close'])
+    print(f'Correlation from {sample_size} samples: {correlation}', file=sys.stderr)
+
+    if pd.isna(correlation):
+        correlation = 'Not enough data'
     # embeds html in the template (graph.html)
-    return render_template('graph.html', plot_div=html, correlation=correlation)
+    return render_template('graph.html', plot_div=html, correlation=correlation, samples=sample_size)
 
 
 def plot_data(word, ticker, trend_data, stock_data):
@@ -104,15 +107,25 @@ def get_correlation(word_data, stock_close_data):
     print(f'Getting correlation between\n{word_data}\nand\n{stock_close_data}\n...', file=sys.stderr)
     net_data = get_merged_data(word_data, stock_close_data)
     correlation = net_data[word_data.name].corr(net_data['Close'])
-    return correlation
+    return correlation, net_data.size
 
 
 def get_merged_data(word_data, stock_close_data):
     # convert stock_data from datetime64[ns, America/New_York] to datetime64[ns]
     stock_close_data.index = stock_close_data.index.tz_localize(None)
+
+    print('Printing dates for word data', file=sys.stderr)
+    for date in word_data.index:
+        print(date, file=sys.stderr)
+
+    print('Printing dates for stock data', file=sys.stderr)
+    for date in stock_close_data.index:
+        print(date, file=sys.stderr)
+
     # Merge the data
-    merged_data = pd.merge(word_data, stock_close_data, left_index=True, right_index=True)
-    merged_data = merged_data.dropna()
+    merged_data = pd.merge(word_data, stock_close_data, left_on='date', right_on='Date')
+    # merged_data = pd.merge(word_data, stock_close_data, left_index=True, right_index=True)
+    # merged_data = merged_data.dropna()
     print(f'Merged data:\n{merged_data}', file=sys.stderr)
     return merged_data
 
