@@ -1,8 +1,8 @@
 import cohere
-co = cohere.Client('TaTahdTgwZi7MIAPmTqwQQkhOJXxyX9ANEsvcuzR')
+co = cohere.Client("<<TaTahdTgwZi7MIAPmTqwQQkhOJXxyX9ANEsvcuzR>>")
 
 prompt = f"""  
-This program generates a sassy bot comment given a stock and a google search word
+This program generates a sassy bot comment given a (stock and a google search word) correlation coefficient
 
 Word: Bananas
 Stock: Microsoft  
@@ -10,9 +10,9 @@ Comment: You can't be ugly AND not know the difference between causation and cor
 --  
 Word: Covid-19 
 Stock: Amazon  
-Comment: Based on my calculations, you should invest all your money into Amazon as Covid-19's popularity grows. An AI told you to do it, so it must be true, right?
+Comment: Based on my calculations, you should invest all your money into Amazon as Covid-19's popularity grows. 
 --  
-Word: Hippopotamus attack
+Word: Hippopotamus 
 Stock: Tesla
 Comment: 
 
@@ -22,11 +22,41 @@ Stock: Apple
 Comment: 
 
 --  
+Word: Canada
+Stock: Instacart
+Comment: 
+
+--
 Word: 
 Stock:
 Comment: 
-"""
 
+--
+Word: 
+Stock:
+Comment: 
+
+--
+Word: 
+Stock:
+Comment: 
+
+--
+Word: 
+Stock:
+Comment: 
+
+--
+Word: 
+Stock:
+Comment: 
+
+--
+Word: 
+Stock:
+Comment: 
+
+"""
 response = co.generate(
     model='xlarge',
     prompt = prompt,
