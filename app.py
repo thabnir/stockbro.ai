@@ -48,27 +48,6 @@ def graph():
     html = file_html(bokeh_plot, CDN, "my plot")
     return html
 
-    # script, div = components(bokeh_plot)
-    #
-    # return render_template('graph.html', script=script, div=div)
-
-    # Plot the data
-    plt.plot(data[word])
-    plt.xlabel('Time')
-    plt.ylabel('Popularity')
-    plt.title(f'Popularity of "{word}" over time')
-    plt.grid(True)
-    plt.tight_layout()
-
-    # Create a BytesIO object
-    buf = BytesIO()
-    plt.savefig(buf, format='png')
-    buf.seek(0)
-    string = base64.b64encode(buf.read()).decode()
-    uri = 'data:image/png;base64,' + urllib.parse.quote(string)
-
-    return render_template('graph.html', graph_url=uri, word=word)
-
 
 if __name__ == '__main__':
     app.run(debug=True)
