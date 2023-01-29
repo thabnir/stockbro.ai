@@ -28,7 +28,12 @@
         <h4>
             {{ correlation|safe }}
             <br>
-            AI generated wisdom: {{ ai_commentary|safe }}
+            AI generated wisdom:
+            <p class="ai-wisdom">
+                <em>
+                    {{ ai_commentary|safe }}
+                </em>
+            </p>
         </h4>
     </div>
 

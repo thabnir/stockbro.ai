@@ -1,17 +1,19 @@
+import csv
+import os
 import sys
 
 import pandas as pd
+import yfinance as yf
+import openai
 from bokeh.embed import file_html
 from bokeh.models import Range1d, LinearAxis
 from bokeh.plotting import figure
 from bokeh.resources import CDN
 from flask import Flask, render_template, request
-from pandas._testing import iloc
 from pytrends.request import TrendReq
-import yfinance as yf
-import csv
 
 app = Flask(__name__)
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 ticker_list = []
 with open("tickers_new_sorted.csv", "r") as csvfile:
@@ -19,11 +21,25 @@ with open("tickers_new_sorted.csv", "r") as csvfile:
     for row in reader:
         ticker_list.append(row[0])  # Add the ticker to the list
 
+with open('openai.txt', 'r') as f:
+    prompt = f.read().strip()
+
 
 @app.route('/')
 def index():
     # print('Hello world!', file=sys.stderr)
     return render_template('index.html', ticker_list=ticker_list)
+
+
+def generate_sass(word, ticker, correlation, sample_size, start_date, end_date):
+    full_prompt = prompt + f'{ticker}\/{word}\/{correlation}\/{sample_size}\/{start_date}\/{end_date} ->","completion":" '
+    response = openai.Completion.create(
+        model="text-davinci-003",
+        prompt=full_prompt,
+        temperature=0.7,
+        max_tokens=100,
+    )
+    return response.choices[0].text
 
 
 @app.route('/graph', methods=['POST'])
@@ -49,7 +65,13 @@ def graph():
     if pd.isna(correlation):
         correlation = 'Not enough data'
     # embeds html in the template (graph.html)
-    return render_template('graph.html', plot_div=html, correlation=correlation, samples=sample_size)
+    return render_template(
+        'graph.html',
+        plot_div=html,
+        correlation=correlation,
+        samples=sample_size,
+        ai_commentary=generate_sass(word, ticker, correlation, sample_size, start, end)
+    )
 
 
 def plot_data(word, ticker, trend_data, stock_data):
@@ -105,6 +127,7 @@ def get_stock_data(ticker_name, start, end):
 def get_correlation(word_data, stock_close_data):
     print(f'Getting correlation between\n{word_data}\nand\n{stock_close_data}\n...', file=sys.stderr)
     net_data = get_merged_data(word_data, stock_close_data)
+    print(f'Correlation between {word_data.name} and Close:\n{net_data[word_data.name].corr(net_data["Close"])}', file=sys.stderr)
     correlation = net_data[word_data.name].corr(net_data['Close'])
     return correlation, net_data.size
 
@@ -112,15 +135,6 @@ def get_correlation(word_data, stock_close_data):
 def get_merged_data(word_data, stock_close_data):
     # convert stock_data from datetime64[ns, America/New_York] to datetime64[ns]
     stock_close_data.index = stock_close_data.index.tz_localize(None)
-
-    print('Printing dates for word data', file=sys.stderr)
-    for date in word_data.index:
-        print(date, file=sys.stderr)
-
-    print('Printing dates for stock data', file=sys.stderr)
-    for date in stock_close_data.index:
-        print(date, file=sys.stderr)
-
     # Merge the data
     merged_data = pd.merge(word_data, stock_close_data, left_on='date', right_on='Date')
     # merged_data = pd.merge(word_data, stock_close_data, left_index=True, right_index=True)
