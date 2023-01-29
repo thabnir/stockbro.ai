@@ -1,6 +1,7 @@
 import pandas as pd
 from pytrends.request import TrendReq
 import pytrends
+from functionsForMLP import *
 from sklearn.metrics import accuracy_score
 from sklearn.neural_network import MLPClassifier
 from sklearn.model_selection import train_test_split
@@ -13,18 +14,19 @@ pytrends.build_payload(kw_list, timeframe='today 5-y')
 
 trend = pytrend.interest_over_time()
 stock = pd.read_csv("S&P.csv")
-stock.drop('High', 'Low', axis = 1)
+stock = stock.drop(['High', 'Low'], axis=1)
+stock['target'] = target_binary(stock.Close)
+stock = stock.reset_index()
 
 # Combine Google Trends and Stock Prices in one CSV file ("stock")
 trends = []
-for trend in trend["NAME COLUMN"]:
+for trend in trend["NAME COLUMN"]: #name of volume of trade
     trends.append(trend)
 
 stock["Trend"] = trends
 
 data = stock
 print(data.head())
-
 
 # Clean up and preprocess the data
 def preprocess(data):
@@ -33,9 +35,10 @@ def preprocess(data):
 
     return x, y
 
+
 all_X, all_y = preprocess(data)
 
-X_train, X_test, y_train, y_test = train_test_split(all_X, all_y)
+X_train, X_test, y_train, y_test = train_test_split(all_X, all_y, shuffle=False)
 print(X_train.shape)
 
 # MLP Classifier
