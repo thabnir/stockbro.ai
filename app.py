@@ -2,7 +2,6 @@ import csv
 import os
 import sys
 
-import numpy as np
 import pandas as pd
 import yfinance as yf
 import openai
@@ -107,8 +106,7 @@ def plot_data(word, ticker, trend_data, stock_data):
     p = figure(title=f'Popularity of "{word}" and price of {ticker} over time',
                x_axis_label='Date',
                x_axis_type='datetime',
-               y_axis_label='Popularity',
-               )
+               y_axis_label='Popularity')
 
     # Plot word popularity
     p.line(trend_data.index, trend_data[word], line_width=2, legend_label=word)
@@ -146,54 +144,7 @@ def plot_data(word, ticker, trend_data, stock_data):
                       mode='vline',
                       renderers=[p.renderers[0]])
     p.add_tools(hover)
-
-    # new chunk
-    # correlation, sample_size = get_correlation(trend_data[word], stock_data['Close'])
-    # # Split stock price in two chunks, one for all but the last 50 days, and one for the last 50 days
-    # first = stock_data.iloc[:-50]
-    # last = stock_data.iloc[-50:]
-    #
-    #
-    # # print columns labels of first and last
-    # print(f'First columns:\n{first.columns}', file=sys.stderr)
-    # print(f'Last columns:\n{last.columns}', file=sys.stderr)
-    #
-    # print(f'First:\n{first}', file=sys.stderr)
-    # print(f'Last:\n{last}', file=sys.stderr)
-
-
-
-    # last = last.reindex(first.index)
-    # first = first.reindex(last.index)
-    #
-    #
-    #
-    # stock_data1 = stock_data.iloc[:-50]
-    # stock_data2 = stock_data.iloc[-50:]
-    # stock_data2 = stock_data2.reindex(stock_data1.index)
-    # stock_data1 = stock_data1.reindex(stock_data2.index)
-
-    # p.line(stock_data.index,
-    #        first['Close'],
-    #        line_width=2, color='yellow',
-    #        legend_label=ticker + ' 1',
-    #        )
-    #
-    # p.line(stock_data.index,
-    #        last['Close'],
-    #        line_width=2, color='green',
-    #        legend_label=ticker + 'prediction',
-    #        )
-    #
-    # # Plot ema
-    # if correlation > 0.5:
-    #     trend_data['ema'] = trend_data[word].ewm(com=0.95).mean()
-    #     p.line(trend_data.index, trend_data['ema'], line_width=2, legend_label='EMA', color='green')
-    #
-    # # end new chunk
-
-    plot = file_html(p, CDN, "my plot 1")
-    return plot
+    return file_html(p, CDN, "my plot 1")
 
 
 def get_trend_data(word, timeframe, geo=''):
