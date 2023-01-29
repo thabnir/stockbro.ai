@@ -32,7 +32,7 @@ def index():
 
 
 def generate_sass(word, ticker, correlation, sample_size, start_date, end_date):
-    full_prompt = prompt + f'{ticker}\/{word}\/{correlation}\/{sample_size}\/{start_date}\/{end_date} ->","completion":" '
+    full_prompt = prompt + f'{ticker}|{word}|{correlation}|{sample_size}|{start_date}|{end_date} -> '
     response = openai.Completion.create(
         model="text-davinci-003",
         prompt=full_prompt,
