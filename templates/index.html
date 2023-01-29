@@ -25,6 +25,9 @@
 
 
 <body>
+<div class="center">
+    <span style="color: red; background: yellow; font-size: xxx-large">{{ error }}</span>
+</div>
 <div style="text-align: center;" class="center">
     <h1>Word Popularity Graph</h1>
     <form action="{{ url_for('graph') }}" method="post">
@@ -67,14 +70,17 @@
         <input type="submit" value="Submit">
     </form>
 
-    <h2>Ultimate Finance Bro Guide</h2>
-    <p>1. Pick a word you think is correlated with stonks</p>
-    <p>2. Pick a stonk</p>
-    <p>3. Select a start date and end date over which to observe said word and stonk</p>
-    <p>4. Click submit</p>
-    <p>5. Observe the stonks</p>
-    <p>6. Observe the correlation</p>
-    <p>7. Profit</p>
+    <div class="finance">
+        <h2>Ultimate Finance Bro Guide</h2>
+        <p>1. Pick a word you think is correlated with a stonk</p>
+        <p>2. Pick a stonk</p>
+        <p>3. Select a start date and end date over which to observe said word and stonk</p>
+        <p>4. Click submit</p>
+        <p>5. Observe the stonks</p>
+        <p>6. Observe the correlation</p>
+        <p>7. Read detailed AI analysis</p>
+        <p>8. Profit</p>
+    </div>
 
 </div>
 </body>

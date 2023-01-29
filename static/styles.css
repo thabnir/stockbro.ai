@@ -3,15 +3,70 @@
     color: white;
 }
 
-.center {
-    margin: auto;
-    width: 50%;
-    border: 3px dashed black;
-    padding: 10px;
+.body {
+    font-family: 'Open Sans', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.ai-wisdom {
-    font-family: "Fira Code", monospace;
-    font-size: 20px;
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.finance {
+    font-family: "Comic Sans MS", monospace;
+    color: red;
+    text-align: center;
+    align-items: center;
+    alignment: center;
+}
+
+.middle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+#plot {
+    width: 100%;
+    margin-bottom: 20px;
+    alignment: center;
+}
+
+img {
+    align-self: center;
+    alignment: center;
+}
+
+
+.em-word {
+    font-family: ".AppleSystemUIFont", monospace;
     color: darkblue;
+}
+
+.samples {
+    font-family: ".AppleSystemUIFont", monospace;
+    color: darkblue;
+}
+
+.correlation {
+    font-family: "Comic Sans MS", monospace;
+    color: red;
+}
+
+
+.ai-wisdom {
+    font-family: "Courier New", monospace;
+    color: green;
 }

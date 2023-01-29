@@ -6,11 +6,14 @@ import pandas as pd
 import yfinance as yf
 import openai
 from bokeh.embed import file_html
-from bokeh.models import Range1d, LinearAxis
+from bokeh.models import Range1d, LinearAxis, WheelZoomTool
 from bokeh.plotting import figure
 from bokeh.resources import CDN
 from flask import Flask, render_template, request
 from pytrends.request import TrendReq
+from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField, SubmitField
+from wtforms.validators import DataRequired
 
 app = Flask(__name__)
 openai.api_key = os.getenv("OPENAI_API_KEY")
@@ -23,6 +26,14 @@ with open("tickers_new_sorted.csv", "r") as csvfile:
 
 with open('openai.txt', 'r') as f:
     prompt = f.read().strip()
+
+
+class InputForm(FlaskForm):
+    word = StringField('Word', validators=[DataRequired()])
+    stock_ticker = StringField('Stock Ticker', validators=[DataRequired()])
+    timeframe_start = StringField('Start Date', validators=[DataRequired()])
+    timeframe_end = StringField('End Date', validators=[DataRequired()])
+    submit = SubmitField('Submit')
 
 
 @app.route('/')
@@ -48,14 +59,25 @@ def graph():
     # for key in request.form:
     #     print(f'{key}: {request.form[key]}', file=sys.stderr)
     # Get the user's input
+    if request.form['word'] == '' or request.form['stock-ticker'] == '' \
+            or request.form['timeframe-start'] == '' or request.form['timeframe-end'] == '':
+        return render_template('index.html', ticker_list=ticker_list, error='Error: Please fill out all fields')
     word = request.form['word']
     ticker = request.form['stock-ticker']
     start = request.form['timeframe-start']
     end = request.form['timeframe-end']
 
+    if start > end:
+        return render_template('index.html', ticker_list=ticker_list, error='Error: Start date must be before end date')
+
     # Get the data
     trend_data = get_trend_data(word, start + ' ' + end)
     stock_data = get_stock_data(ticker, start, end)
+
+    if stock_data is None:
+        return render_template('index.html', ticker_list=ticker_list, error='Error: Invalid ticker')
+    elif trend_data is None:
+        return render_template('index.html', ticker_list=ticker_list, error='Error: Invalid trend data')
 
     html = plot_data(word, ticker, trend_data, stock_data)
 
@@ -70,7 +92,9 @@ def graph():
         plot_div=html,
         correlation=correlation,
         samples=sample_size,
-        ai_commentary=generate_sass(word, ticker, correlation, sample_size, start, end)
+        ai_commentary=generate_sass(word, ticker, correlation, sample_size, start, end),
+        word=word,
+        ticker=ticker,
     )
 
 
@@ -80,7 +104,8 @@ def plot_data(word, ticker, trend_data, stock_data):
     bokeh_plot = figure(title=f'Popularity of the word "{word}" and {ticker} stock price over time',
                         x_axis_label='Date',
                         x_axis_type='datetime',
-                        y_axis_label='Popularity')
+                        y_axis_label='Popularity',
+                        )
 
     # Plot word popularity
     bokeh_plot.line(trend_data.index, trend_data[word], line_width=2, legend_label=word)
@@ -101,6 +126,8 @@ def plot_data(word, ticker, trend_data, stock_data):
     bokeh_plot.xaxis[0].ticker.desired_num_ticks = 10
     bokeh_plot.legend.location = 'top_left'
     bokeh_plot.legend.click_policy = 'hide'
+    # set wheel zoom to on by default
+    bokeh_plot.toolbar.active_scroll = bokeh_plot.select_one(WheelZoomTool)
 
     html = file_html(bokeh_plot, CDN, "my plot")
     return html
@@ -127,7 +154,8 @@ def get_stock_data(ticker_name, start, end):
 def get_correlation(word_data, stock_close_data):
     print(f'Getting correlation between\n{word_data}\nand\n{stock_close_data}\n...', file=sys.stderr)
     net_data = get_merged_data(word_data, stock_close_data)
-    print(f'Correlation between {word_data.name} and Close:\n{net_data[word_data.name].corr(net_data["Close"])}', file=sys.stderr)
+    print(f'Correlation between {word_data.name} and Close:\n{net_data[word_data.name].corr(net_data["Close"])}',
+          file=sys.stderr)
     correlation = net_data[word_data.name].corr(net_data['Close'])
     return correlation, net_data.size
 

@@ -1,44 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" type="text/css" href="/static/styles.css">
+    <link rel="stylesheet" type="text/css" href="static/styles.css">
     <meta charset="UTF-8">
     <title>Plot</title>
-    <link rel="stylesheet" type="text/css" href="/static/styles.css">
-    <style>
-        body {
-            font-family: 'Open Sans', sans-serif;
-        }
-
-        body {
-            background-color: whitesmoke;
-        }
-    </style>
 </head>
 <body>
-<div style="text-align: center;" class="center">
-    <div style="text-align: center;" class="center" id="plot">
-        {{ plot_div|safe }}
-    </div>
-
-    <div style="text-align: center;" class="center" id="correlation">
+<div class="container" id="plot">
+    {{ plot_div|safe }}
+</div>
+<div class="container" id="correlation">
+    <div class="body">
         <h2>
-            Correlation from {{ samples|safe }} samples:
-        </h2>
-        <h4>
-            {{ correlation|safe }}
+            Correlation between <em class="em-word">{{ word|safe }}</em> and
+            <em class="em-word">{{ ticker|safe }}</em> generated from
+            <em class="em-word">{{ samples|safe }}</em> samples:
             <br>
-            AI generated wisdom:
-            <p class="ai-wisdom">
-                <em>
+            <em class="correlation">{{ correlation|safe }}</em>
+        </h2>
+        <br>
+    </div>
+    <div class="container">
+        <div>
+            <h2 class="body">
+                AI generated wisdom:
+            </h2>
+        </div>
+        <div>
+            <h2 class="body">
+                <em class="ai-wisdom">
                     {{ ai_commentary|safe }}
                 </em>
-            </p>
-        </h4>
+            </h2>
+        </div>
     </div>
-
     <img src="static/stonks.png" alt="stonks">
-
 </div>
 </body>
 </html>
