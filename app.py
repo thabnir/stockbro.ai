@@ -28,14 +28,6 @@ with open('openai.txt', 'r') as f:
     prompt = f.read().strip()
 
 
-class InputForm(FlaskForm):
-    word = StringField('Word', validators=[DataRequired()])
-    stock_ticker = StringField('Stock Ticker', validators=[DataRequired()])
-    timeframe_start = StringField('Start Date', validators=[DataRequired()])
-    timeframe_end = StringField('End Date', validators=[DataRequired()])
-    submit = SubmitField('Submit')
-
-
 @app.route('/')
 def index():
     # print('Hello world!', file=sys.stderr)
@@ -93,8 +85,7 @@ def graph():
         plot_div=plot_html,
         correlation=correlation,
         samples=sample_size,
-        ai_commentary='left blank for testing purposes',
-        # generate_sass(word, ticker, correlation, sample_size, start, end),
+        ai_commentary=generate_sass(word, ticker, correlation, sample_size, start, end),
         word=word,
         ticker=ticker,
     )
