@@ -1,2 +1,2 @@
 Project built for McHacks 10
-by Thabnir, Clarariachi & Rain
+by Thabnir, clarariachi & Rain1618
