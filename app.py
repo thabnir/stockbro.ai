@@ -14,11 +14,10 @@ import csv
 app = Flask(__name__)
 
 ticker_list = []
-with open("tickers.csv", "r") as csvfile:
+with open("tickers_new_sorted.csv", "r") as csvfile:
     reader = csv.reader(csvfile)
-    next(reader)  # Skip the header row
     for row in reader:
-        ticker_list.append(row[1])  # Add the ticker to the list
+        ticker_list.append(row[0])  # Add the ticker to the list
 
 
 @app.route('/')
