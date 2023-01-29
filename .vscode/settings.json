@@ -1,0 +1,4 @@
+{
+  "appService.defaultWebAppToDeploy": "/subscriptions/16369d69-0d1b-46fa-9753-af1b8e32241c/AppServices/subscriptions/16369d69-0d1b-46fa-9753-af1b8e32241c/resourceGroups/henry.lefebvre_rg_5489/providers/Microsoft.Web/sites/mchacks-flask-app-2023/subscriptions/16369d69-0d1b-46fa-9753-af1b8e32241c/resourceGroups/appsvc_linux_centralus_basic/providers/Microsoft.Web/sites/msdocs-python-webapp-quickstart-MCH",
+  "appService.deploySubpath": "."
+}

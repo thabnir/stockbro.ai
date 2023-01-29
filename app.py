@@ -134,6 +134,16 @@ def plot_data(word, ticker, trend_data, stock_data):
                       formatters={'@x': 'datetime'},
                       mode='vline',
                       renderers=[p.renderers[0]])
+
+
+    # new chunk
+    correlation, sample_size = get_correlation(trend_data[word], stock_data['Close'])
+    # Plot ema
+    if correlation > 0.5:
+        trend_data['ema'] = trend_data[word].ewm(com=0.95).mean()
+        p.line(trend_data.index, trend_data['ema'], line_width=2, legend_label='EMA', color='green')
+
+    # # end new chunk
     p.add_tools(hover)
     return file_html(p, CDN, "my plot 1")
 
