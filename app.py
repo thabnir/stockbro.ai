@@ -2,6 +2,7 @@ import csv
 import os
 import sys
 
+import numpy as np
 import pandas as pd
 import yfinance as yf
 import openai
@@ -12,7 +13,7 @@ from bokeh.resources import CDN
 from flask import Flask, render_template, request
 from pytrends.request import TrendReq
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField
+from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
 
 app = Flask(__name__)
@@ -59,7 +60,8 @@ def graph():
     # for key in request.form:
     #     print(f'{key}: {request.form[key]}', file=sys.stderr)
     # Get the user's input
-    if request.form['word'] == '' or request.form['stock-ticker'] == '' \
+    if request.form['word'] == '' \
+            or request.form['stock-ticker'] == '' or request.form['stock-ticker'] == 'Select a Ticker' \
             or request.form['timeframe-start'] == '' or request.form['timeframe-end'] == '':
         return render_template('index.html', ticker_list=ticker_list, error='Error: Please fill out all fields')
     word = request.form['word']
@@ -79,7 +81,7 @@ def graph():
     elif trend_data is None:
         return render_template('index.html', ticker_list=ticker_list, error='Error: Invalid trend data')
 
-    html = plot_data(word, ticker, trend_data, stock_data)
+    plot_html = plot_data(word, ticker, trend_data, stock_data)
 
     correlation, sample_size = get_correlation(trend_data[word], stock_data['Close'])
     print(f'Correlation from {sample_size} samples: {correlation}', file=sys.stderr)
@@ -89,10 +91,11 @@ def graph():
     # embeds html in the template (graph.html)
     return render_template(
         'graph.html',
-        plot_div=html,
+        plot_div=plot_html,
         correlation=correlation,
         samples=sample_size,
-        ai_commentary=generate_sass(word, ticker, correlation, sample_size, start, end),
+        ai_commentary='left blank for testing purposes',
+        # generate_sass(word, ticker, correlation, sample_size, start, end),
         word=word,
         ticker=ticker,
     )
@@ -123,14 +126,13 @@ def plot_data(word, ticker, trend_data, stock_data):
            legend_label=ticker,
            y_range_name=stock_range)
 
-    p.add_layout(LinearAxis(y_range_name=stock_range), "right")
+    # p.add_layout(LinearAxis(y_range_name=stock_range), "right")
 
     p.xaxis[0].ticker.desired_num_ticks = 10
     p.legend.location = 'top_left'
     p.legend.click_policy = 'hide'
     # set wheel zoom to on by default
     p.toolbar.active_scroll = p.select_one(WheelZoomTool)
-    p.title.text_font_size = '16pt'
 
     # add a hover tool that shows the date and the popularity to the word
     hover = HoverTool(tooltips=[('Date', '@x{%F}'), ('Popularity', '@y')],
@@ -142,11 +144,56 @@ def plot_data(word, ticker, trend_data, stock_data):
     hover = HoverTool(tooltips=[('Date', '@x{%F}'), (ticker, '$@y')],
                       formatters={'@x': 'datetime'},
                       mode='vline',
-                      renderers=[p.renderers[1]])
+                      renderers=[p.renderers[0]])
     p.add_tools(hover)
 
-    html = file_html(p, CDN, "my plot")
-    return html
+    # new chunk
+    # correlation, sample_size = get_correlation(trend_data[word], stock_data['Close'])
+    # # Split stock price in two chunks, one for all but the last 50 days, and one for the last 50 days
+    # first = stock_data.iloc[:-50]
+    # last = stock_data.iloc[-50:]
+    #
+    #
+    # # print columns labels of first and last
+    # print(f'First columns:\n{first.columns}', file=sys.stderr)
+    # print(f'Last columns:\n{last.columns}', file=sys.stderr)
+    #
+    # print(f'First:\n{first}', file=sys.stderr)
+    # print(f'Last:\n{last}', file=sys.stderr)
+
+
+
+    # last = last.reindex(first.index)
+    # first = first.reindex(last.index)
+    #
+    #
+    #
+    # stock_data1 = stock_data.iloc[:-50]
+    # stock_data2 = stock_data.iloc[-50:]
+    # stock_data2 = stock_data2.reindex(stock_data1.index)
+    # stock_data1 = stock_data1.reindex(stock_data2.index)
+
+    # p.line(stock_data.index,
+    #        first['Close'],
+    #        line_width=2, color='yellow',
+    #        legend_label=ticker + ' 1',
+    #        )
+    #
+    # p.line(stock_data.index,
+    #        last['Close'],
+    #        line_width=2, color='green',
+    #        legend_label=ticker + 'prediction',
+    #        )
+    #
+    # # Plot ema
+    # if correlation > 0.5:
+    #     trend_data['ema'] = trend_data[word].ewm(com=0.95).mean()
+    #     p.line(trend_data.index, trend_data['ema'], line_width=2, legend_label='EMA', color='green')
+    #
+    # # end new chunk
+
+    plot = file_html(p, CDN, "my plot 1")
+    return plot
 
 
 def get_trend_data(word, timeframe, geo=''):
