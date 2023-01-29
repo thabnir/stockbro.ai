@@ -135,7 +135,6 @@ def plot_data(word, ticker, trend_data, stock_data):
                       mode='vline',
                       renderers=[p.renderers[0]])
 
-
     # new chunk
     correlation, sample_size = get_correlation(trend_data[word], stock_data['Close'])
     # Plot ema
