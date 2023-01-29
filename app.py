@@ -11,9 +11,6 @@ from bokeh.plotting import figure
 from bokeh.resources import CDN
 from flask import Flask, render_template, request
 from pytrends.request import TrendReq
-from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
-from wtforms.validators import DataRequired
 
 app = Flask(__name__)
 openai.api_key = os.getenv("OPENAI_API_KEY")

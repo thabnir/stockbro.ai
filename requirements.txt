@@ -1,0 +1,6 @@
+pandas~=1.5.3
+yfinance~=0.2.9
+openai~=0.26.4
+bokeh~=3.0.3
+Flask~=2.2.2
+pytrends~=4.9.0
