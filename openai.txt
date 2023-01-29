@@ -13,7 +13,7 @@ GOOG|Google|0.9398249887911664|298|2004-01-01|2023-01-28 -> No shit, Sherlock. I
 TSLX|Elon Musk|0.9398249887911664|298|2004-01-01|2023-01-28 -> That's not even the right ticker symbol you dumbass. Although the correlation is still really high. Maybe I'm the dumbass?
 TSLA|Elon Musk|0.7061423435201899|198|2004-01-01|2023-01-28 -> I lost all of my money on TSLA and my partner left me. Everything is gone. Everything. High correlation means free money, though, so get to buying ASAP.
 AMC|tendies|0.9398249887911664|298|2004-01-01|2023-01-28 -> I'm not sure what tendies are, but I'm pretty sure they're not stocks. I'm also pretty sure that you're an idiot.
-AAPL|Apple|0.9398249887911664|298|2004-01-01|2023-01-28 -> Wow that's crazy who could have guessed that the name of the company is correlated with its
+AAPL|Apple|0.9398249887911664|298|2004-01-01|2023-01-28 -> Wow that's crazy who could have guessed that the name of the company is correlated with its stocks
 AMD|blockchain|0.6794625194224226|298|2004-01-01|2023-01-28 -> Interesting correlation. Maybe it's worth a shot to invest in AMD and hope for the best?
 MSFT|Microsoft|0.9398249887911664|298|2004-01-01|2023-01-28 -> Yeah, no surprise there. MSFT and Microsoft are pretty much the same thing.
 MCD|obesity| 0.8373320309768456|258|2004-01-01|2023-01-28 -> That jolly, evil clown man's at it again fattening up our nation. Ever read Hansel and Gretel?
