@@ -17,8 +17,8 @@
 }
 
 .finance {
-    font-family: "Comic Sans MS", monospace;
-    color: red;
+    font-family: 'Open Sans', sans-serif;
+    color: black;
     text-align: center;
     align-items: center;
     alignment: center;
@@ -68,5 +68,8 @@ img {
 
 .ai-wisdom {
     font-family: "Courier New", monospace;
-    color: green;
+    color: lawngreen;
+    background: black;
+    padding: 20px;
+    border-radius: 5px;
 }

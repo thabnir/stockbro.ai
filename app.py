@@ -6,7 +6,7 @@ import pandas as pd
 import yfinance as yf
 import openai
 from bokeh.embed import file_html
-from bokeh.models import Range1d, LinearAxis, WheelZoomTool
+from bokeh.models import Range1d, LinearAxis, WheelZoomTool, HoverTool
 from bokeh.plotting import figure
 from bokeh.resources import CDN
 from flask import Flask, render_template, request
@@ -101,35 +101,51 @@ def graph():
 def plot_data(word, ticker, trend_data, stock_data):
     print(f'Graphing data for {word} and {ticker}...', file=sys.stderr)
     # Create a plot (bokeh)
-    bokeh_plot = figure(title=f'Popularity of the word "{word}" and {ticker} stock price over time',
-                        x_axis_label='Date',
-                        x_axis_type='datetime',
-                        y_axis_label='Popularity',
-                        )
+    p = figure(title=f'Popularity of "{word}" and price of {ticker} over time',
+               x_axis_label='Date',
+               x_axis_type='datetime',
+               y_axis_label='Popularity',
+               )
 
     # Plot word popularity
-    bokeh_plot.line(trend_data.index, trend_data[word], line_width=2, legend_label=word)
-    bokeh_plot.y_range = Range1d(trend_data[word].min() - 1, trend_data[word].max() + 1)
+    p.line(trend_data.index, trend_data[word], line_width=2, legend_label=word)
+    p.y_range = Range1d(trend_data[word].min() - 1, trend_data[word].max() + 1)
 
     stock_range = "second y" + "_range"
-    bokeh_plot.extra_y_ranges = {stock_range: Range1d(stock_data['Close'].min() - 1, stock_data['Close'].max() + 1)}
+    p.extra_y_ranges = {stock_range: Range1d(stock_data['Close'].min() - 1, stock_data['Close'].max() + 1)}
+    # label the right y-axis
+    p.add_layout(LinearAxis(y_range_name=stock_range, axis_label='Price (USD)'), 'right')
 
     # Plot stock price
-    bokeh_plot.line(stock_data.index,
-                    stock_data['Close'],
-                    line_width=2, color='red',
-                    legend_label=ticker,
-                    y_range_name=stock_range)
+    p.line(stock_data.index,
+           stock_data['Close'],
+           line_width=2, color='red',
+           legend_label=ticker,
+           y_range_name=stock_range)
 
-    bokeh_plot.add_layout(LinearAxis(y_range_name=stock_range), "right")
+    p.add_layout(LinearAxis(y_range_name=stock_range), "right")
 
-    bokeh_plot.xaxis[0].ticker.desired_num_ticks = 10
-    bokeh_plot.legend.location = 'top_left'
-    bokeh_plot.legend.click_policy = 'hide'
+    p.xaxis[0].ticker.desired_num_ticks = 10
+    p.legend.location = 'top_left'
+    p.legend.click_policy = 'hide'
     # set wheel zoom to on by default
-    bokeh_plot.toolbar.active_scroll = bokeh_plot.select_one(WheelZoomTool)
+    p.toolbar.active_scroll = p.select_one(WheelZoomTool)
+    p.title.text_font_size = '16pt'
 
-    html = file_html(bokeh_plot, CDN, "my plot")
+    # add a hover tool that shows the date and the popularity to the word
+    hover = HoverTool(tooltips=[('Date', '@x{%F}'), ('Popularity', '@y')],
+                      formatters={'@x': 'datetime'},
+                      mode='vline')
+    p.add_tools(hover)
+
+    # add a hover tool that shows the date and the price to the stock
+    hover = HoverTool(tooltips=[('Date', '@x{%F}'), (ticker, '$@y')],
+                      formatters={'@x': 'datetime'},
+                      mode='vline',
+                      renderers=[p.renderers[1]])
+    p.add_tools(hover)
+
+    html = file_html(p, CDN, "my plot")
     return html
 
 
