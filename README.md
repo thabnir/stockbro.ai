@@ -8,7 +8,7 @@ We were originally inspired by a research paper (see below) which found that the
 Said research paper: 
 Preis, T., Moat, H. & Stanley, H. Quantifying Trading Behavior in Financial Markets Using Google Trends. Sci Rep 3, 1684 (2013). [link]https://doi.org/10.1038/srep01684
 ## What it does
-Stock Bro AI attempts to predict the stock market by finding obscure correlations between a stock's prices and Google Trends over time by calculating the Pearson correlation coefficient. Spoiler: it doesn't work. It also regularly sends sardonic comments to put finance bros who think they know how the stock market works in their place.
+stockbro.ai attempts to predict the stock market by finding obscure correlations between a stock's prices and Google Trends over time by calculating the Pearson correlation coefficient. Spoiler: it doesn't work. It knows it doesn't work. Whether stockbro.ai cares enough to tell you that it doesn't know what's going on or simply dons a cool professional guise as it shepherds you to financial ruin is up to chance.
 ## How we built it
 We made a Flask app and used html  + Bokeh to plot graphs showing correlations between a Google search's popularity over time and the associated stock's price. A variety of data science libraries like pandas along with yfinance and pytrends were used to retrieve and process the necessary data from Yahoo Finance and Google Trends respectively. 
 ## Challenges we ran into
