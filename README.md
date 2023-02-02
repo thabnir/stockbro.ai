@@ -3,7 +3,7 @@ by Thabnir, clarariachi & Rain1618
 
 ## Inspiration
 Money. Stonks. We like that.
-We were originally inspired by a research paper (see below) which found that the search volume of certain words associated with the economy (e.g. debt) could be indicative of the general direction of the stock market and predict future stock movements. We wanted to extend this idea and see if we could find other keywords that may be indicative of the future of the stock market. As data can be sometimes tedious to understand, we also built a bot that tells the user in no uncertain terms whether of not there is a correlation between the keyword and the stock (and occasionally _questions_ the thought process behind the user's selection). 
+We were originally inspired by a research paper (see below) which found that the search volume of certain words associated with the economy (e.g. debt) could be indicative of the general direction of the stock market and predict future stock movements. We wanted to extend this idea and see if we could find other keywords that may be indicative of the future of the stock market. As data can be sometimes tedious to understand, we also built a bot that tells the user in no uncertain terms whether or not there is a correlation between the keyword and the stock (and occasionally _questions_ the thought process behind the user's selection). 
 
 Said research paper: 
 Preis, T., Moat, H. & Stanley, H. Quantifying Trading Behavior in Financial Markets Using Google Trends. Sci Rep 3, 1684 (2013). [link]https://doi.org/10.1038/srep01684
