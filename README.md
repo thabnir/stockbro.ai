@@ -1,5 +1,9 @@
+# stockbro.ai
+
+🏆 Winner of the Best Newbie Hack at McHacks 10. 🎉
+
 Project built for McHacks 10
-by Thabnir, clarariachi & Rain1618
+by Thabnir, clarariachi, and Rain1618
 
 ## Inspiration
 Money. Stonks. We like that.
